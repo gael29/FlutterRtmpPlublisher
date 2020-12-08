@@ -12,10 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.github.faucamp.simplertmp.RtmpHandler
 import com.seu.magicfilter.utils.MagicFilterType
@@ -28,7 +25,7 @@ import java.net.SocketException
 import java.util.Random
 
 class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
-    private lateinit var btnPublish: Button
+    private lateinit var circleBtn: ToggleButton
     private lateinit var btnSwitchCamera:ImageView
     private lateinit var btnBack:ImageView
 //    private lateinit var btnPause:Button
@@ -50,7 +47,7 @@ class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandl
 
         rtmpUrl = intent.getStringExtra("url")
 
-        btnPublish = findViewById<Button>(R.id.publish)
+        circleBtn = findViewById<ToggleButton>(R.id.circleBtn)
         btnSwitchCamera = findViewById<ImageView>(R.id.swCam)
         btnBack = findViewById<ImageView>(R.id.backButton)
 //        btnPause = findViewById(R.id.pause) as Button
@@ -59,73 +56,37 @@ class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandl
         mPublisher.setEncodeHandler(SrsEncodeHandler(this))
         mPublisher.setRtmpHandler(RtmpHandler(this))
         mPublisher.setRecordHandler(SrsRecordHandler(this))
-        mPublisher.setPreviewResolution(640, 360)
-        mPublisher.setOutputResolution(360, 640)
+        mPublisher.setPreviewResolution(1920, 1080)
+        mPublisher.setOutputResolution(1080, 1920)
         mPublisher.setVideoHDMode()
         mPublisher.startCamera()
-        btnPublish.setOnClickListener {
-            if (btnPublish.text.toString().contains("Start")) {
+        circleBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
                 val editor = sp.edit()
                 editor.putString("rtmpUrl", rtmpUrl)
                 editor.apply()
                 mPublisher.startPublish(rtmpUrl)
                 mPublisher.startCamera()
-//                if (btnSwitchEncoder.text.toString().contentEquals("soft encoder")) {
-//                    Toast.makeText(applicationContext, "Use hard encoder", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(applicationContext, "Use soft encoder", Toast.LENGTH_SHORT).show()
-//                }
-                btnPublish.text = getString(R.string.stop_publishing)
 
-//                btnPause.isEnabled = true
-            } else if (btnPublish.text.toString().contains("Stop")) {
+            } else {
                 mPublisher.stopPublish()
                 mPublisher.stopRecord()
-                btnPublish.text = getString(R.string.start_publishing)
-
-//                btnPause.isEnabled = false
+                this.onBackPressed()
             }
         }
-//        btnPause.setOnClickListener {
-//            if (btnPause.text.toString().equals("Pause")) {
-//                mPublisher.pausePublish()
-//                btnPause.text = "resume"
-//            } else {
-//                mPublisher.resumePublish()
-//                btnPause.text = "Pause"
-//            }
-//        }
+
         btnSwitchCamera.setOnClickListener {
             mPublisher.switchCameraFace((mPublisher.cameraId + 1) % Camera.getNumberOfCameras())
         }
 
         btnBack.setOnClickListener {
-            var msg = "";
-            if(btnPublish.text.toString().contains("Stop")) {
-                msg = "Do you want to stop streaming and go back?"
-            } else {
-                msg = "Do you want to go back?"
-            }
-            val alertDialog = AlertDialog.Builder(this)
-                    .setTitle("Warning")
-                    .setMessage(msg)
-                    .setPositiveButton("GO Back") { dialog, which ->
-                        dialog.dismiss()
-                        mPublisher.stopPublish()
-                        this.onBackPressed()
-                    }
-                    .setNegativeButton("Cancel") { dialog, which ->
-                        dialog.cancel()
-                    }
-                    .create()
-            alertDialog.show()
+            mPublisher.stopPublish()
+             this.onBackPressed()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val btn = findViewById<Button>(R.id.publish)
-        btn.isEnabled = true
         mPublisher.resumeRecord()
     }
     override  fun onPause() {
@@ -142,10 +103,6 @@ class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandl
         mPublisher.stopEncode()
         mPublisher.stopRecord()
         mPublisher.setScreenOrientation(newConfig.orientation)
-        if (btnPublish.text.toString().contentEquals("stop"))
-        {
-            mPublisher.startEncode()
-        }
         mPublisher.startCamera()
     }
     private fun handleException(e:Exception) {
@@ -154,7 +111,6 @@ class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandl
             Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             mPublisher.stopPublish()
             mPublisher.stopRecord()
-            btnPublish.text = getString(R.string.start_publishing)
         }
         catch (e1:Exception) {
             //
