@@ -17,11 +17,13 @@
         android:required="true"
         />
 
-    <application>
+    <application
+     android:theme="@style/AppTheme">>
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
+       
             android:name=".RTMPActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|navigation">
+            android:configChanges="orientation|screenSize|keyboardHidden|navigation"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
