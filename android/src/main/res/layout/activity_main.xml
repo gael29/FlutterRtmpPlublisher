@@ -7,10 +7,9 @@
     tools:context=".RTMPActivity">
 
     <net.ossrs.yasea.SrsCameraView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/glsurfaceview_camera"
-       />
+        android:id="@+id/glsurfaceview_camera" />
 
     <ToggleButton
         android:id="@+id/circleBtn"

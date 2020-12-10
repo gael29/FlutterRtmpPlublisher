@@ -5,26 +5,30 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.hardware.Camera
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.Toast
-import android.widget.ToggleButton
+import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import com.github.faucamp.simplertmp.RtmpHandler
+import com.seu.magicfilter.utils.MagicFilterType
 import net.ossrs.yasea.SrsCameraView
 import net.ossrs.yasea.SrsEncodeHandler
 import net.ossrs.yasea.SrsPublisher
 import net.ossrs.yasea.SrsRecordHandler
 import java.io.IOException
 import java.net.SocketException
-import java.util.*
+import java.util.Random
 
 class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
     private lateinit var circleBtn: ToggleButton
     private lateinit var btnSwitchCamera:ImageView
     private lateinit var btnBack:ImageView
-    //    private lateinit var btnPause:Button
+//    private lateinit var btnPause:Button
     private lateinit var sp:SharedPreferences
     private var rtmpUrl = "rtmp://live.mux.com/app/22083600-1066-72a9-adf9-704aaf1c42b8"
     private lateinit var mPublisher:SrsPublisher
@@ -32,14 +36,10 @@ class RTMPActivity:AppCompatActivity(), RtmpHandler.RtmpListener, SrsRecordHandl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         supportActionBar?.hide()
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-         getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_main)
         // response screen rotation event
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)
         // restore data.
 
 
