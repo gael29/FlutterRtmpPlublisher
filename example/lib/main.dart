@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: RaisedButton(
           child: Text("Start Stream"),
           onPressed: () {
-            RTMPPublisher.streamVideo("<PLACE_YOUR_RTMP_STREAM_URL>");
+            RTMPPublisher.streamVideo("rtmp://live.mux.com/app/e64acab5-0122-3df4-cde6-35617dd3b882");
           },
         ),
       ),

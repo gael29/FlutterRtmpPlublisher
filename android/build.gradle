@@ -44,6 +44,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libx264.libs', include: ['*.jar'])
     implementation fileTree(dir: 'libs', include: ['*.aar'])
+
+    implementation 'com.github.begeekmyfriend:yasea:android-16-SNAPSHOT'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
 }

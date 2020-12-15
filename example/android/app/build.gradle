@@ -25,6 +25,20 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    packagingOptions {
+        pickFirst 'lib/mips/libenc.so'
+        pickFirst 'lib/mips/libyuv.so'
+
+        pickFirst 'lib/x86/libenc.so'
+        pickFirst 'lib/x86/libyuv.so'
+
+        pickFirst 'lib/armeabi-v7a/libenc.so'
+        pickFirst 'lib/armeabi-v7a/libyuv.so'
+
+        pickFirst 'lib/arm64-v8a/libenc.so'
+        pickFirst 'lib/arm64-v8a/libyuv.so'
+    }
+
     compileSdkVersion 28
 
     lintOptions {
@@ -55,7 +69,7 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
